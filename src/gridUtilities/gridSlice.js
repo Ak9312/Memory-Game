@@ -24,6 +24,8 @@ export const gridSlice = createSlice({
       }
       state.value = cards.sort(() => Math.random() - 0.5);
       state.icons = getShuffledIconsList();
+      state.flippedIndices = [];
+      state.matchedIndices = [];
     },
     flipCard: (state, action) => {
       const index = action.payload;
