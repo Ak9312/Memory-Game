@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  shuffleGrid,
-  flipCard,
-  checkMatch,
-  resetGrid,
-} from "./gridUtilities/gridSlice";
+import { shuffleGrid, flipCard, checkMatch } from "./gridUtilities/gridSlice";
 import { getIconByName } from "./gridUtilities/constansts";
 
 const App = () => {
@@ -73,26 +68,12 @@ const App = () => {
     }
   };
 
-  const handleReset = () => {
-    dispatch(resetGrid());
-    dispatch(shuffleGrid());
-    setClickCount(0);
-    setTimer(0);
-    setIsActive(false);
-  };
-
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
       <div className="mb-4">
         <button
           onClick={handleShuffle}
-          className="mr-2 px-4 py-2 bg-blue-500 text-white rounded shadow"
-        >
-          Shuffle
-        </button>
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 bg-red-500 text-white rounded shadow"
+          className="mr-2 px-4 py-2 bg-red-500 text-white rounded shadow"
         >
           Reset
         </button>

@@ -52,18 +52,11 @@ export const gridSlice = createSlice({
         state.flippedIndices = [];
       }
     },
-    resetGrid: (state) => {
-      state.value = Array(16).fill(null);
-      state.flippedIndices = [];
-      state.matchedIndices = [];
-      state.icons = iconsList;
-      state.isGameWon = false;
-    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { gridInitialize, shuffleGrid, flipCard, checkMatch, resetGrid } =
+export const { gridInitialize, shuffleGrid, flipCard, checkMatch } =
   gridSlice.actions;
 
 export default gridSlice.reducer;
