@@ -10,6 +10,7 @@ import { getIconByName } from "./gridUtilities/constansts";
 
 const App = () => {
   const mainGrid = useSelector((state) => state.grid.value);
+  
   const icons = useSelector((state) => state.grid.icons);
   const flippedIndices = useSelector((state) => state.grid.flippedIndices);
   const matchedIndices = useSelector((state) => state.grid.matchedIndices);
@@ -18,6 +19,10 @@ const App = () => {
   const [clickCount, setClickCount] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
+
+  useEffect(()=>{
+    dispatch(shuffleGrid());
+  },[])
 
   useEffect(() => {
     let interval = null;
