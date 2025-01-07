@@ -5,6 +5,7 @@ const initialState = {
   flippedIndices: [], // to keep track of flipped cards
   matchedIndices: [], // to keep track of matched cards
   icons: [], // to keep track of icon
+  isGameWon: false, // to keep track if game is won
 };
 
 export const gridSlice = createSlice({
@@ -16,6 +17,7 @@ export const gridSlice = createSlice({
       state.flippedIndices = [];
       state.matchedIndices = [];
       state.icons = iconsList;
+      state.isGameWon = false;
     },
     shuffleGrid: (state) => {
       const cards = [];
@@ -26,6 +28,7 @@ export const gridSlice = createSlice({
       state.icons = getShuffledIconsList();
       state.flippedIndices = [];
       state.matchedIndices = [];
+      state.isGameWon = false;
     },
     flipCard: (state, action) => {
       const index = action.payload;
@@ -42,21 +45,18 @@ export const gridSlice = createSlice({
         const [firstIndex, secondIndex] = state.flippedIndices;
         if (state.value[firstIndex] === state.value[secondIndex]) {
           state.matchedIndices.push(firstIndex, secondIndex);
+          if (state.matchedIndices.length === state.value.length) {
+            state.isGameWon = true;
+          }
         }
         state.flippedIndices = [];
       }
-    },
-    resetGrid: (state) => {
-      state.value = Array(16).fill(null);
-      state.flippedIndices = [];
-      state.matchedIndices = [];
-      state.icons = iconsList;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { gridInitialize, shuffleGrid, flipCard, checkMatch, resetGrid } =
+export const { gridInitialize, shuffleGrid, flipCard, checkMatch } =
   gridSlice.actions;
 
 export default gridSlice.reducer;
