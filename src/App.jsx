@@ -10,19 +10,20 @@ import { getIconByName } from "./gridUtilities/constansts";
 
 const App = () => {
   const mainGrid = useSelector((state) => state.grid.value);
-  
+
   const icons = useSelector((state) => state.grid.icons);
   const flippedIndices = useSelector((state) => state.grid.flippedIndices);
   const matchedIndices = useSelector((state) => state.grid.matchedIndices);
+  const isGameWon = useSelector((state) => state.grid.isGameWon);
   const dispatch = useDispatch();
 
   const [clickCount, setClickCount] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(shuffleGrid());
-  },[])
+  }, []);
 
   useEffect(() => {
     let interval = null;
@@ -43,6 +44,13 @@ const App = () => {
       }, 1000);
     }
   }, [flippedIndices, dispatch]);
+
+  useEffect(() => {
+    if (isGameWon) {
+      alert("You won the game!");
+      setIsActive(false);
+    }
+  }, [isGameWon]);
 
   const handleShuffle = () => {
     dispatch(shuffleGrid());
