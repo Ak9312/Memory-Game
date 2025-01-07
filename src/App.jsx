@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { shuffleGrid, flipCard, checkMatch } from "./gridUtilities/gridSlice";
 import { getIconByName } from "./gridUtilities/constansts";
+import "./App.css";
 
 const App = () => {
   const mainGrid = useSelector((state) => state.grid.value);
-
   const icons = useSelector((state) => state.grid.icons);
   const flippedIndices = useSelector((state) => state.grid.flippedIndices);
   const matchedIndices = useSelector((state) => state.grid.matchedIndices);
@@ -16,10 +16,12 @@ const App = () => {
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
+  // Shuffle grid on mount
   useEffect(() => {
     dispatch(shuffleGrid());
-  }, []);
+  }, [dispatch]);
 
+  // Timer logic
   useEffect(() => {
     let interval = null;
     if (isActive) {
@@ -32,6 +34,7 @@ const App = () => {
     return () => clearInterval(interval);
   }, [isActive, timer]);
 
+  // Check for matches
   useEffect(() => {
     if (flippedIndices.length === 2) {
       setTimeout(() => {
@@ -40,6 +43,7 @@ const App = () => {
     }
   }, [flippedIndices, dispatch]);
 
+  // Game won logic
   useEffect(() => {
     if (isGameWon) {
       alert("You won the game!");
@@ -47,13 +51,7 @@ const App = () => {
     }
   }, [isGameWon]);
 
-  const handleShuffle = () => {
-    dispatch(shuffleGrid());
-    setClickCount(0);
-    setTimer(0);
-    setIsActive(false);
-  };
-
+  // Handle card click
   const handleCardClick = (index) => {
     if (
       flippedIndices.length < 2 &&
@@ -61,11 +59,19 @@ const App = () => {
       !matchedIndices.includes(index)
     ) {
       dispatch(flipCard(index));
-      setClickCount(clickCount + 1);
+      setClickCount((prev) => prev + 1);
       if (clickCount === 0) {
         setIsActive(true);
       }
     }
+  };
+
+  // Reset game
+  const handleShuffle = () => {
+    dispatch(shuffleGrid());
+    setClickCount(0);
+    setTimer(0);
+    setIsActive(false);
   };
 
   return (
@@ -86,23 +92,29 @@ const App = () => {
         {mainGrid.map((item, index) => (
           <div
             key={index}
-            className="flex justify-center items-center w-16 h-16 bg-white border border-gray-300 rounded shadow"
+            className={`card ${
+              flippedIndices.includes(index) || matchedIndices.includes(index)
+                ? "flipped"
+                : ""
+            }`}
             onClick={() => handleCardClick(index)}
           >
-            {matchedIndices.includes(index) ||
-            flippedIndices.includes(index) ? (
-              <img
-                src={getIconByName(icons[item])}
-                alt={item}
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <img
-                src={getIconByName("question")}
-                alt="hidden"
-                className="w-full h-full object-contain"
-              />
-            )}
+            <div className="card-inner">
+              <div className="card-front">
+                <img
+                  src={getIconByName("question")}
+                  alt="hidden"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="card-back">
+                <img
+                  src={getIconByName(icons[item])}
+                  alt={item}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>
