@@ -4,7 +4,7 @@ const initialState = {
   value: Array(16).fill(null), // 4x4 grid initialized with null values
   flippedIndices: [], // to keep track of flipped cards
   matchedIndices: [], // to keep track of matched cards
-  icons: [], // to keep track of icon
+  icons: getShuffledIconsList(), // to keep track of icon
 };
 
 export const gridSlice = createSlice({
