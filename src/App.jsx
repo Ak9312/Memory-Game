@@ -70,10 +70,7 @@ const App = () => {
 
   // Reset game
   const handleShuffle = () => {
-    dispatch(shuffleGrid());
-    setClickCount(0);
-    setTimer(0);
-    setIsActive(false);
+    window.location.reload(); // Reload the page
   };
 
   const handleCloseModal = () => {
@@ -84,16 +81,28 @@ const App = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
       <div className="mb-4">
-        <button
-          onClick={handleShuffle}
-          className="mr-2 px-4 py-2 bg-red-500 text-white rounded shadow"
-        >
-          Reset
-        </button>
+        {isActive ? (
+          <button
+            onClick={handleShuffle}
+            className="mr-2 px-4 py-2 bg-red-500 text-white rounded shadow"
+          >
+            Reset
+          </button>
+        ) : (
+          <button className="mr-2 px-4 py-2"></button>
+        )}
       </div>
       <div className="mb-4">
-        <p>Clicks: {clickCount}</p>
-        <p>Timer: {timer}s</p>
+        {isActive ? (
+          <p>Clicks: {clickCount}</p>
+        ) : (
+          <p className="text-2xl">Welcome to memory game</p>
+        )}
+        {isActive ? (
+          <p>Timer: {timer}s</p>
+        ) : (
+          <p className="text-gray-700">Click on any tiles to begin!</p>
+        )}
       </div>
       <div className="grid grid-cols-4 gap-4">
         {mainGrid.map((item, index) => (
@@ -131,6 +140,11 @@ const App = () => {
         timer={timer}
         clickCount={clickCount}
       />
+      <div className="text-center mt-10 text-gray-400 text-sm">
+        <p>
+          &copy; {new Date().getFullYear()} Abhinandan. All rights reserved.
+        </p>
+      </div>
     </div>
   );
 };
