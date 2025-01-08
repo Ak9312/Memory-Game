@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { shuffleGrid, flipCard, checkMatch } from "./gridUtilities/gridSlice";
 import { getIconByName } from "./gridUtilities/constansts";
 import "./App.css";
+import GameCompletedModal from "./GameCompletedModal/GameCompletedModal";
 
 const App = () => {
   const mainGrid = useSelector((state) => state.grid.value);
@@ -15,6 +16,7 @@ const App = () => {
   const [clickCount, setClickCount] = useState(0);
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Shuffle grid on mount
   useEffect(() => {
@@ -46,7 +48,7 @@ const App = () => {
   // Game won logic
   useEffect(() => {
     if (isGameWon) {
-      alert("You won the game!");
+      setIsModalOpen(true);
       setIsActive(false);
     }
   }, [isGameWon]);
@@ -72,6 +74,11 @@ const App = () => {
     setClickCount(0);
     setTimer(0);
     setIsActive(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    handleShuffle();
   };
 
   return (
@@ -118,6 +125,12 @@ const App = () => {
           </div>
         ))}
       </div>
+      <GameCompletedModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        timer={timer}
+        clickCount={clickCount}
+      />
     </div>
   );
 };
